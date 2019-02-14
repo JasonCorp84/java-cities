@@ -10,7 +10,16 @@ import org.springframework.stereotype.Service;
 
 public class CityMessageListener {
     @RabbitListener(queues = RestcitiesApplication.QUEUE_CITY_1)
-    public void reciveMessage(CityMessage cm){
-        log.info("Recieved Nessage: {}", cm.toString());
+    public void receiveMessage(CityMessage cm){
+        log.info("Recieved QUEUE_CITY_1: {}", cm.toString());
     }
+    @RabbitListener(queues = RestcitiesApplication.QUEUE_SECRET)
+    public void receiveSecretMsg(CityMessage cm){
+        log.info("Recieved QUEUE_SECRET: {}", cm.toString());
+    }
+    @RabbitListener(queues = RestcitiesApplication.QUEUE_CITY_2)
+    public void receiveCity2Msg(CityMessage cm){
+        log.info("Recieved QUEUE_CITY_2: {}", cm.toString());
+    }
+
 }

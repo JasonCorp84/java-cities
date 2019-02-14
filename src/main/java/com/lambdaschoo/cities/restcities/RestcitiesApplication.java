@@ -17,6 +17,7 @@ import javax.servlet.http.PushBuilder;
 public class RestcitiesApplication {
 
     public static final String EXCHANGE_NAME = "CsabaServer";
+    public static final String QUEUE_SECRET = "SecretQueue";
     public static final String QUEUE_CITY_1 = "CityOneQueue";
     public static final String QUEUE_CITY_2 = "CityTwoQueue";
 
@@ -24,11 +25,20 @@ public class RestcitiesApplication {
         SpringApplication.run(RestcitiesApplication.class, args);
     }
 
+
     @Bean
     public TopicExchange appExchange() {
         return new TopicExchange(EXCHANGE_NAME);
     }
 
+    @Bean
+    public Queue appQueueSecret(){
+        return new Queue(QUEUE_SECRET);
+    }
+    @Bean
+    public Binding declareBindingSecret(){
+        return BindingBuilder.bind(appQueueSecret()).to(appExchange()).with(QUEUE_SECRET);
+    }
     @Bean
     public Queue appQueueCityOne() {
         return new Queue(QUEUE_CITY_1);
@@ -39,7 +49,8 @@ public class RestcitiesApplication {
         return BindingBuilder.bind(appQueueCityOne()).to(appExchange()).with(QUEUE_CITY_1);
     }
 
-    @Bean Queue appQueueCityTwo(){
+    @Bean
+    public Queue appQueueCityTwo(){
         return new Queue(QUEUE_CITY_2);
     }
 

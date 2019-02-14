@@ -21,7 +21,7 @@ public class CityMessageSender {
         this.cityRepos = cityRepos;
     }
 
-    @Scheduled(fixedDelay = 3000L)
+    @Scheduled(fixedDelay = 30000L)
     public void sendMessage(){
         ArrayList<City> cities = new ArrayList<City>();
 
@@ -31,6 +31,10 @@ public class CityMessageSender {
             int rand = new Random().nextInt(10);
             boolean randBool = new Random().nextBoolean();
             final CityMessage message = new CityMessage(c.toString(), rand, randBool);
+            if(randBool) {
+                log.info("Sending to secret queue");
+                ct.convertAndSend(RestcitiesApplication.QUEUE_SECRET);
+            }
             if(rand <= 5) {
                 log.info("Sending message city1: ");
                 ct.convertAndSend(RestcitiesApplication.QUEUE_CITY_1, message);

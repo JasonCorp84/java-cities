@@ -1,23 +1,26 @@
 package com.lambdaschoo.cities.restcities;
 
+import lombok.Data;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Entity;
+
+@Data
+@Entity
 
 public class City {
     private @Id @GeneratedValue long id;
     private String name;
-    private String state;
-    private Long medianHomePrices;
+
+    private int medianHomePrices;
     private int affordabilityIndex;
 
     public City(){
 
     }
 
-    public City(String name, String state, Long medianHomePrices, int affordabilityIndex) {
+    public City(String name, int medianHomePrices, int affordabilityIndex) {
         this.name = name;
-        this.state = state;
         this.medianHomePrices = medianHomePrices;
         this.affordabilityIndex = affordabilityIndex;
     }
