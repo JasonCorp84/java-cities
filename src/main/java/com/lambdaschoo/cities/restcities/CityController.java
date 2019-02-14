@@ -19,14 +19,9 @@ public class CityController {
         this.cityrepos = cityrepos;
         this.rt = rt;
     }
-
-    @GetMapping("/cities/afford")
-    public void findSome() {
+    public void SECRET(){
         ArrayList<City> cities = new ArrayList<City>();
         cities.addAll(cityrepos.findAll());
-
-
-        /* ---------------- S E C R E T   Q U E U E ----------------*/
         for (City c : cities) {
             int rand = new Random().nextInt(10);
             boolean randBool = new Random().nextBoolean();
@@ -36,6 +31,13 @@ public class CityController {
                 rt.convertAndSend(RestcitiesApplication.QUEUE_SECRET, message);
             }
         }
+    }
+    @GetMapping("/cities/afford")
+    public void findSome() {
+        ArrayList<City> cities = new ArrayList<City>();
+        cities.addAll(cityrepos.findAll());
+        /* ---------------- S E C R E T   Q U E U E ----------------*/
+            this.SECRET();
         /* -------------  put all NON secret messages with affordability index < 6 in the cities1 queue ----------------------*/
         for (City c : cities) {
             int rand = new Random().nextInt(10);
@@ -61,15 +63,7 @@ public class CityController {
         ArrayList<City> citiesForHome = new ArrayList<City>();
         citiesForHome.addAll(cityrepos.findAll());
 
-        for (City c : citiesForHome) {
-            int rand = new Random().nextInt(10);
-            boolean randBool = new Random().nextBoolean();
-            final CityMessage message = new CityMessage(c.toString(), rand, randBool);
-            if (randBool) {
-                log.info("QUEUE_SECRET");
-                rt.convertAndSend(RestcitiesApplication.QUEUE_SECRET, message);
-            }
-        }
+        this.SECRET();
         /* -------------  put all NON secret messages with affordability index < 6 in the cities1 queue ----------------------*/
         for (City c : citiesForHome) {
             int rand = new Random().nextInt(10);
@@ -90,7 +84,21 @@ public class CityController {
             }
         }
     }
-
-
-
+    @GetMapping("/cities/name")
+    public void assignmentThree() {
+        ArrayList<City> cities = new ArrayList<City>();
+        cities.addAll(cityrepos.findAll());
+        for (City c : cities) {
+            int rand = new Random().nextInt(10);
+            boolean randBool = new Random().nextBoolean();
+            final CityMessage message = new CityMessage(c.toString(), rand, randBool);
+            if (randBool) {
+                log.info("QUEUE_SECRET");
+                rt.convertAndSend(RestcitiesApplication.QUEUE_SECRET, message);
+            } else {
+                log.info("QUEUE_CITY_1");
+                rt.convertAndSend(RestcitiesApplication.QUEUE_CITY_1, message);
+            }
+        }
+    }
 }

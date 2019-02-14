@@ -21,7 +21,7 @@ public class CityMessageSender {
         this.cityRepos = cityRepos;
     }
 
-    @Scheduled(fixedDelay = 30000L)
+    @Scheduled(fixedDelay = 300000L)
     public void sendMessage(){
         ArrayList<City> cities = new ArrayList<City>();
 
