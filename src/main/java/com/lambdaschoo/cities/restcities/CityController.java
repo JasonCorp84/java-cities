@@ -56,4 +56,41 @@ public class CityController {
             }
         }
     }
+    @GetMapping("/cities/home")
+    public void findHome(){
+        ArrayList<City> citiesForHome = new ArrayList<City>();
+        citiesForHome.addAll(cityrepos.findAll());
+
+        for (City c : citiesForHome) {
+            int rand = new Random().nextInt(10);
+            boolean randBool = new Random().nextBoolean();
+            final CityMessage message = new CityMessage(c.toString(), rand, randBool);
+            if (randBool) {
+                log.info("QUEUE_SECRET");
+                rt.convertAndSend(RestcitiesApplication.QUEUE_SECRET, message);
+            }
+        }
+        /* -------------  put all NON secret messages with affordability index < 6 in the cities1 queue ----------------------*/
+        for (City c : citiesForHome) {
+            int rand = new Random().nextInt(10);
+            boolean randBool = new Random().nextBoolean();
+            final CityMessage message = new CityMessage(c.toString(), rand, randBool);
+            if (!randBool && c.getMedianHomePrices() > 200000) {
+                log.info("QUEUE1");
+                rt.convertAndSend(RestcitiesApplication.QUEUE_CITY_1, message);
+            }
+        }
+        for (City c : citiesForHome) {
+            int rand = new Random().nextInt(10);
+            boolean randBool = new Random().nextBoolean();
+            final CityMessage message = new CityMessage(c.toString(), rand, randBool);
+            if (!randBool && c.getMedianHomePrices() <= 200000) {
+                log.info("QUEUE2");
+                rt.convertAndSend(RestcitiesApplication.QUEUE_CITY_2, message);
+            }
+        }
+    }
+
+
+
 }
